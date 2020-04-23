@@ -1,35 +1,54 @@
-library widget_scan;
-
 import 'dart:io';
-import 'route/routeTemplate.dart';
-import 'package:flutter/widgets.dart';
+
+import './generateRoute.dart';
 
 class WidgetScan {
-  List<WidgetObject> getWidgetList(RegExp rule, {String limitPath}) {
-    List<WidgetObject> widgetList = List<WidgetObject>();
-    String dirPath = limitPath ?? Directory.current.path + '\\lib';
+
+  WidgetScan({
+    this.rule,
+    this.limitPath,
+  });
+
+  final RegExp rule;
+  final String limitPath;
+
+
+  List<WidgetObject> _widgetList;
+
+  void run() {
+    getWidgetList();
+    generateRoute();
+  }
+
+  List<WidgetObject> getWidgetList() {
+    _widgetList = List<WidgetObject>();
+    String dirPath = limitPath ?? Directory.current.path + r'\lib';
+    RegExp regExp = rule ?? RegExp('.*View');
     Directory(dirPath)
       ..listSync(recursive: true).forEach((item) {
         if (FileSystemEntity.isFileSync(item.path)) {
-          String fileName = rule.stringMatch(_getFileName(item.path));
+          String fileName = regExp.stringMatch(_getFileName(item.path));
           if (!_isNullOrEmpty(fileName)) {
-            widgetList.add(WidgetObject(fileName, _getFileRelativePath(item.path, dirPath), fileName.toUpperCase()));
+            _widgetList.add(WidgetObject(
+              fileName,
+              _getFileRelativePath(item.path, dirPath),
+              fileName.toUpperCase(),
+            ));
           }
         }
       });
-
-    return widgetList;
+    
+    return _widgetList;
   }
 
-  generateRoute(List<WidgetObject> widgetList) async {
-    File file = File(Directory.current.path + r'\lib\route\routeTest.text');
-    String content = await file.readAsString();
-    File targetFile = File(Directory.current.path + r'\lib\route\routeTemplate.dart');
-    await targetFile.writeAsString(content);
+  generateRoute() {
+    GenerateRoute(_widgetList, getTargetPackageName()).generate();
   }
 
-  Map<String, WidgetBuilder> getRoutes() {
-    return Routes.routes;
+  String getTargetPackageName() {
+    File file = File('${Directory.current.path}//pubspec.yaml');
+    // TODO check
+    return file.readAsLinesSync()[0].split(':').last.trim();
   }
 
   String _getFileName(String path) {
@@ -55,5 +74,4 @@ class WidgetObject {
   String widgetName;
 
   WidgetObject(this.name, this.path, this.widgetName);
-
 }
