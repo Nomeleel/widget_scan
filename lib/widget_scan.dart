@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import './generateRoute.dart';
+import 'generate_route.dart';
+import 'util/util.dart';
 
 class WidgetScan {
 
@@ -23,16 +24,17 @@ class WidgetScan {
   List<WidgetObject> getWidgetList() {
     _widgetList = List<WidgetObject>();
     String dirPath = limitPath ?? Directory.current.path + r'\lib';
-    RegExp regExp = rule ?? RegExp('.*View');
+    RegExp regExp = rule ?? getSuffixRegExp('view');
     Directory(dirPath)
       ..listSync(recursive: true).forEach((item) {
         if (FileSystemEntity.isFileSync(item.path)) {
-          String fileName = regExp.stringMatch(_getFileName(item.path));
-          if (!_isNullOrEmpty(fileName)) {
+          String fileName = regExp.stringMatch(getFileName(item.path).toLowerCase());
+          if (!isNullOrEmpty(fileName)) {
             _widgetList.add(WidgetObject(
+              // If has same file name, whether change key to path plus name.
               fileName,
-              _getFileRelativePath(item.path, dirPath),
-              fileName.toUpperCase(),
+              getFileRelativePath(item.path, dirPath),
+              getWidgetName(fileName),
             ));
           }
         }
@@ -42,25 +44,7 @@ class WidgetScan {
   }
 
   generateRoute() {
-    GenerateRoute(_widgetList, getTargetPackageName()).generate();
-  }
-
-  String getTargetPackageName() {
-    File file = File('${Directory.current.path}//pubspec.yaml');
-    // TODO check
-    return file.readAsLinesSync()[0].split(':').last.trim();
-  }
-
-  String _getFileName(String path) {
-    return path?.substring(path.lastIndexOf(r'\') + 1);
-  }
-
-  String _getFileRelativePath(String path, String basePath) {
-    return path?.substring(basePath.length + 1)?.replaceAll(r'\', '/');
-  }
-
-  bool _isNullOrEmpty(String str) {
-    return str == null || str.isEmpty;
+    GenerateRoute(_widgetList).generate();
   }
 
   RegExp getSuffixRegExp(String suffix) {
