@@ -56,7 +56,7 @@ Now the corresponding route has been generated in **view_routes.dart**, and in y
 import 'package:widget_scan/route/view_routes.dart';
 ```
 
-### 4. Use it
+### 5. Use it
 
 The **view_routes.dart** content is as follows.
 
