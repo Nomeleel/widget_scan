@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:path/path.dart' as path;
+
 import 'generate_route.dart';
 import 'util/util.dart';
 
@@ -23,7 +25,7 @@ class WidgetScan {
 
   List<WidgetObject> getWidgetList() {
     _widgetList = List<WidgetObject>();
-    String dirPath = limitPath ?? Directory.current.path + r'\lib';
+    String dirPath = limitPath ?? path.join(Directory.current.path, 'lib');
     RegExp regExp = rule ?? getSuffixRegExp('view');
     Directory(dirPath)
       ..listSync(recursive: true).forEach((item) {

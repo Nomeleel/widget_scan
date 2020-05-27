@@ -1,7 +1,12 @@
 import 'dart:io';
 
+import 'package:path/path.dart' as path;
+import 'package:path/src/internal_style.dart';
+
+final currentStyle = path.style as InternalStyle;
+
 String getFileName(String path) {
-  return path?.substring(path.lastIndexOf(r'\') + 1);
+  return path?.substring(path.lastIndexOf(currentStyle.separator) + 1);
 }
 
 String getWidgetName(String fileName) {
@@ -13,7 +18,7 @@ String toUpperCaseOnlyFirstLetter(String str) {
 }
 
 String getFileRelativePath(String path, String basePath) {
-  return path?.substring(basePath.length + 1)?.replaceAll(r'\', '/');
+  return path?.substring(basePath.length + 1)?.replaceAll(currentStyle.separator, '/');
 }
 
 bool isNullOrEmpty(String str) {
@@ -21,20 +26,19 @@ bool isNullOrEmpty(String str) {
 }
 
 String getTargetPackageName() {
-  File file = File('${Directory.current.path}//pubspec.yaml');
+  File file = File(path.join(Directory.current.path, 'pubspec.yaml'));
   // TODO check
   return file.readAsLinesSync()[0].split(':').last.trim();
 }
 
 String getWidgetScanRefPath() {
-  File file = File('${Directory.current.path}//.packages');
+  File file = File(path.join(Directory.current.path, '.packages'));
   String targetLine = file.readAsLinesSync().lastWhere(
     (item) => item.contains('widget_scan'));
-  return targetLine.contains('file:')
-      ? targetLine.substring(targetLine.lastIndexOf(':') - 1)
-      : targetLine.split(':').last;
+  return path.fromUri(targetLine.substring(targetLine.indexOf(':') + 1));
 }
 
-String getTargetFilePath(String path) {
-  return Uri.file(getWidgetScanRefPath() + path).toFilePath();
+String getTargetFilePath(String filePath) {
+  //return Uri.file(getWidgetScanRefPath() + path).toFilePath();
+  return path.join(getWidgetScanRefPath(), filePath);
 }
