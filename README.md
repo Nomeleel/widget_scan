@@ -101,9 +101,9 @@ Navigator.of(context).pushNamed(
 );
 ```
 
-# Naming constraints
+# Constraints
 
-If you want to use this library correctly, you need to follow the following constraints in naming, of course, this is also the naming constraint recommended by Flutter.
+If you want to use this library correctly, you need to follow the following constraints in naming or other, of course, this is also the naming constraint recommended by Flutter and Dart.
 
 + File naming with underscore interval, first letter lowercase.
 
@@ -134,4 +134,43 @@ AnimationController
 ClipRRect
 ConstrainedBox
 SizeTransition
+```
+
++ The Widget must have a constant constructor.
+
+Widgets are the central class hierarchy in the Flutter framework. A widget is an **immutable** description of part of a user interface. Widgets can be inflated into elements, which manage the underlying render tree.
+
+About Widget:
+```
+@immutable
+abstract class Widget extends DiagnosticableTree {
+  /// Initializes [key] for subclasses.
+  const Widget({ this.key });
+  // ...
+}
+```
+
+[More info about Widget.](https://github.com/flutter/flutter/blob/master/packages/flutter/lib/src/widgets/framework.dart#L423)
+
+We can write this code when we customize the Widget:
+
+```
+class CustomizedWidget extends StatefulWidget {
+  const CustomizedWidget({Key key, this.title}) : super(key: key);
+  
+  final String title;
+  // ...
+}
+```
+
+When we use Widget, you can add the **const** keyword.
+
+```
+ListView(
+  physics: const BouncingScrollPhysics(),
+),
+
+Padding(
+  padding: const EdgeInsets.all(7)
+)
 ```

@@ -6,7 +6,6 @@ import 'generate_route.dart';
 import 'util/util.dart';
 
 class WidgetScan {
-
   WidgetScan({
     this.rule,
     this.limitPath,
@@ -14,7 +13,6 @@ class WidgetScan {
 
   final RegExp rule;
   final String limitPath;
-
 
   List<WidgetObject> _widgetList;
 
@@ -24,28 +22,31 @@ class WidgetScan {
   }
 
   List<WidgetObject> getWidgetList() {
-    _widgetList = List<WidgetObject>();
-    String dirPath = limitPath ?? path.join(Directory.current.path, 'lib');
-    RegExp regExp = rule ?? getSuffixRegExp('view');
+    _widgetList = <WidgetObject>[];
+    final String dirPath =
+        limitPath ?? path.join(Directory.current.path, 'lib');
+    final RegExp regExp = rule ?? getSuffixRegExp('view');
     Directory(dirPath)
-      ..listSync(recursive: true).forEach((item) {
-        if (FileSystemEntity.isFileSync(item.path)) {
-          String fileName = regExp.stringMatch(getFileName(item.path).toLowerCase());
-          if (!isNullOrEmpty(fileName)) {
-            _widgetList.add(WidgetObject(
-              // If has same file name, whether change key to path plus name.
-              fileName,
-              getFileRelativePath(item.path, dirPath),
-              getWidgetName(fileName),
-            ));
-          }
+        .listSync(recursive: true)
+        .forEach((FileSystemEntity item) {
+      if (FileSystemEntity.isFileSync(item.path)) {
+        final String fileName =
+            regExp.stringMatch(getFileName(item.path).toLowerCase());
+        if (!isNullOrEmpty(fileName)) {
+          _widgetList.add(WidgetObject(
+            // If has same file name, whether change key to path plus name.
+            fileName,
+            getFileRelativePath(item.path, dirPath),
+            getWidgetName(fileName),
+          ));
         }
-      });
-    
+      }
+    });
+
     return _widgetList;
   }
 
-  generateRoute() {
+  void generateRoute() {
     GenerateRoute(_widgetList).generate();
   }
 
@@ -55,9 +56,9 @@ class WidgetScan {
 }
 
 class WidgetObject {
-  String name;
-  String path;
-  String widgetName;
+  const WidgetObject(this.name, this.path, this.widgetName);
 
-  WidgetObject(this.name, this.path, this.widgetName);
+  final String name;
+  final String path;
+  final String widgetName;
 }

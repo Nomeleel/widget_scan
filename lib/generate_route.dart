@@ -1,14 +1,13 @@
 import 'dart:io';
 
-import 'widget_scan.dart';
 import 'util/util.dart';
+import 'widget_scan.dart';
 
 class GenerateRoute {
-
   GenerateRoute(
     this.widgetList,
   );
-  
+
   List<WidgetObject> widgetList;
 
   void generate() {
@@ -16,27 +15,35 @@ class GenerateRoute {
   }
 
   void generateViewRoutes() {
-    //TODO String Builder?
+    // TODO(Nomeleel): String Builder?
     // If has same file name, whether change key to path plus name.
     String exportContent = '';
     String routesContent = '';
-    var packageName = getTargetPackageName();
-    widgetList?.forEach((item) {
-      exportContent += "export 'package:$packageName/${item.path}';\n";
-      routesContent += "  '${item.name}': (BuildContext context) => ${item.widgetName}(),\n";
-    });
+    const String importContent = "import 'view_export_list.dart';";
+    final String packageName = getTargetPackageName();
+    if (widgetList != null) {
+      final void Function(WidgetObject) generateContent = (WidgetObject item) {
+        exportContent += "export 'package:$packageName/${item.path}';\n";
+        routesContent +=
+            "  '${item.name}': (BuildContext context) => const ${item.widgetName}(),\n";
+      };
+      widgetList.forEach(generateContent);
+    }
 
-    if (exportContent.length > 0) {
-      File file = File(getTargetFilePath('route/view_export_list.dart'));
+    if (exportContent.isNotEmpty) {
+      final File file = File(getTargetFilePath('route/view_export_list.dart'));
       file.writeAsString(exportContent);
     }
-    
-    if (routesContent.length > 0) {
-      File templateFile = File(getTargetFilePath('route/route_template'));
-      String templateContent = templateFile.readAsStringSync();
-      File file = File(getTargetFilePath('route/view_routes.dart'));
-      file.writeAsString(templateContent.replaceAll('// Replace here.', routesContent));
+
+    if (routesContent.isNotEmpty) {
+      final File templateFile = File(getTargetFilePath('route/route_template'));
+      // TODO(Nomeleel): String Builder?
+      final String templateContent = templateFile
+          .readAsStringSync()
+          .replaceAll('// Import here.', importContent)
+          .replaceAll('// Replace here.', routesContent);
+      File(getTargetFilePath('route/view_routes.dart'))
+          .writeAsString(templateContent);
     }
   }
-
 }

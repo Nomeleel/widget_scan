@@ -1,24 +1,26 @@
 import 'dart:io';
 
 import 'package:path/path.dart' as path;
-import 'package:path/src/internal_style.dart';
 
-final currentStyle = path.style as InternalStyle;
-
-String getFileName(String path) {
-  return path?.substring(path.lastIndexOf(currentStyle.separator) + 1);
+String getFileName(String filePath) {
+  return filePath?.substring(filePath.lastIndexOf(path.separator) + 1);
 }
 
 String getWidgetName(String fileName) {
-  return fileName.split('_').map((item) => toUpperCaseOnlyFirstLetter(item)).join('');
+  return fileName
+      .split('_')
+      .map((String item) => toUpperCaseOnlyFirstLetter(item))
+      .join('');
 }
 
 String toUpperCaseOnlyFirstLetter(String str) {
   return str[0].toUpperCase() + str.substring(1).toLowerCase();
 }
 
-String getFileRelativePath(String path, String basePath) {
-  return path?.substring(basePath.length + 1)?.replaceAll(currentStyle.separator, '/');
+String getFileRelativePath(String filePath, String basePath) {
+  return filePath
+      ?.substring(basePath.length + 1)
+      ?.replaceAll(path.separator, '/');
 }
 
 bool isNullOrEmpty(String str) {
@@ -26,15 +28,16 @@ bool isNullOrEmpty(String str) {
 }
 
 String getTargetPackageName() {
-  File file = File(path.join(Directory.current.path, 'pubspec.yaml'));
-  // TODO check
+  final File file = File(path.join(Directory.current.path, 'pubspec.yaml'));
+  // TODO(Nomeleel): check
   return file.readAsLinesSync()[0].split(':').last.trim();
 }
 
 String getWidgetScanRefPath() {
-  File file = File(path.join(Directory.current.path, '.packages'));
-  String targetLine = file.readAsLinesSync().lastWhere(
-    (item) => item.contains('widget_scan'));
+  final File file = File(path.join(Directory.current.path, '.packages'));
+  final String targetLine = file
+      .readAsLinesSync()
+      .lastWhere((String item) => item.contains('widget_scan'));
   return path.fromUri(targetLine.substring(targetLine.indexOf(':') + 1));
 }
 

@@ -1,12 +1,13 @@
-/*******************************
- *  
- * Generated file. Do not edit.
- * 
- ******************************/
+/// *****************************
+
+/// Generated file. Do not edit.
+
+/// *****************************
 
 import 'package:flutter/widgets.dart';
-import 'view_export_list.dart';
 
-Map<String, WidgetBuilder> viewRoutes = {
+// Import here.
+
+Map<String, WidgetBuilder> viewRoutes = <String, WidgetBuilder>{
 // Replace here.
 };
