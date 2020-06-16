@@ -10,7 +10,7 @@ How to use this library.
 
 Add this to your package's **pubspec.yaml** file:
 
-```
+```yaml
 dependencies:
   widget_scan:
     git: git@github.com:Nomeleel/widget_scan.git
@@ -24,13 +24,13 @@ After the first step is saved, the library will be obtained automatically, or yo
 
 with Pub:
 
-```
+```dart
 pub get
 ```
 
 with Flutter:
 
-```
+```dart
 flutter pub get
 ```
 
@@ -38,13 +38,13 @@ flutter pub get
 
 with Pub:
 
-```
+```dart
 pub run widget_scan
 ```
 
 with Flutter:
 
-```
+```dart
 flutter pub run widget_scan
 ```
 
@@ -52,7 +52,7 @@ flutter pub run widget_scan
 
 Now the corresponding route has been generated in **view_routes.dart**, and in your project code, you can use:
 
-```
+```dart
 import 'package:widget_scan/route/view_routes.dart';
 ```
 
@@ -60,7 +60,7 @@ import 'package:widget_scan/route/view_routes.dart';
 
 The **view_routes.dart** content is as follows.
 
-```
+```dart
 import 'package:flutter/widgets.dart';
 import 'view_export_list.dart';
 
@@ -72,14 +72,14 @@ Map<String, WidgetBuilder> viewRoutes = {
 
 The depend **view_export_list.dart** content is as follows.
 
-```
+```dart
 export 'package:xxxxxxx/view/sudoku/first_view.dart';
 export 'package:xxxxxxx/view/sudoku/second_view.dart';
 ```
 
 If you use ***CupertinoApp*** or ***MaterialApp***, you can directly assign *viewRoutes* to *routes* attribute.
 
-```
+```dart
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -94,7 +94,7 @@ class MyApp extends StatelessWidget {
 
 Then you can use the route name to navigate.
 
-```
+```dart
 Navigator.of(context).pushNamed(
     'first_view', 
     arguments: 'This is first view',
@@ -107,7 +107,7 @@ If you want to use this library correctly, you need to follow the following cons
 
 + File naming with underscore interval, first letter lowercase.
 
-```
+```dart
 examples:
 view_routes.dart
 widget_helper.dart
@@ -115,7 +115,7 @@ widget_helper.dart
 
 + Files of the same category are added same suffixes.
 
-```
+```dart
 examples:
 view
 main_view.dart
@@ -128,7 +128,7 @@ widget_helper.dart
 
 + Use **Pascal** for class naming.
 
-```
+```dart
 examples:
 AnimationController
 ClipRRect
@@ -141,7 +141,7 @@ SizeTransition
 Widgets are the central class hierarchy in the Flutter framework. A widget is an **immutable** description of part of a user interface. Widgets can be inflated into elements, which manage the underlying render tree.
 
 About Widget:
-```
+```dart
 @immutable
 abstract class Widget extends DiagnosticableTree {
   /// Initializes [key] for subclasses.
@@ -154,7 +154,7 @@ abstract class Widget extends DiagnosticableTree {
 
 We can write this code when we customize the Widget:
 
-```
+```dart
 class CustomizedWidget extends StatefulWidget {
   const CustomizedWidget({Key key, this.title}) : super(key: key);
   
@@ -165,7 +165,7 @@ class CustomizedWidget extends StatefulWidget {
 
 When we use Widget, you can add the **const** keyword.
 
-```
+```dart
 ListView(
   physics: const BouncingScrollPhysics(),
 ),
