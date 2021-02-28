@@ -31,18 +31,17 @@ class GenerateRoute {
     }
 
     if (exportContent.isNotEmpty) {
-      final File file = File(getTargetFilePath('route/view_export_list.dart'));
+      createDirectory(getProjectLibPath('route'));
+      final File file = File(getProjectLibPath('route/view_export_list.dart'));
       file.writeAsString(exportContent);
-    }
 
-    if (routesContent.isNotEmpty) {
       final File templateFile = File(getTargetFilePath('route/route_template'));
       // TODO(Nomeleel): String Builder?
       final String templateContent = templateFile
           .readAsStringSync()
           .replaceAll('// Import here.', importContent)
           .replaceAll('// Replace here.', routesContent);
-      File(getTargetFilePath('route/view_routes.dart'))
+      File(getProjectLibPath('route/view_routes.dart'))
           .writeAsString(templateContent);
     }
   }

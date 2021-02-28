@@ -24,7 +24,7 @@ String getFileRelativePath(String filePath, String basePath) {
 }
 
 bool isNullOrEmpty(String str) {
-  return str == null || str.isEmpty;
+  return str?.isEmpty ?? true;
 }
 
 String getTargetPackageName() {
@@ -44,4 +44,14 @@ String getWidgetScanRefPath() {
 String getTargetFilePath(String filePath) {
   //return Uri.file(getWidgetScanRefPath() + path).toFilePath();
   return path.join(getWidgetScanRefPath(), filePath);
+}
+
+String getProjectLibPath([String filePath]) {
+  return path.join(Directory.current.path, 'lib', filePath ?? '');
+}
+
+void createDirectory(String path) {
+  final Directory directory = Directory(path);
+  if (!directory.existsSync()) 
+    directory.createSync();
 }

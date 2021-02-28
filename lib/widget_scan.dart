@@ -23,22 +23,20 @@ class WidgetScan {
 
   List<WidgetObject> getWidgetList() {
     _widgetList = <WidgetObject>[];
-    final String dirPath =
-        limitPath ?? path.join(Directory.current.path, 'lib');
+    final String dirPath = limitPath ?? path.join(Directory.current.path, 'lib');
     final RegExp regExp = rule ?? getSuffixRegExp('view');
-    Directory(dirPath)
-        .listSync(recursive: true)
-        .forEach((FileSystemEntity item) {
+    Directory(dirPath).listSync(recursive: true).forEach((FileSystemEntity item) {
       if (FileSystemEntity.isFileSync(item.path)) {
-        final String fileName =
-            regExp.stringMatch(getFileName(item.path).toLowerCase());
+        final String fileName = regExp.stringMatch(getFileName(item.path).toLowerCase());
         if (!isNullOrEmpty(fileName)) {
-          _widgetList.add(WidgetObject(
-            // If has same file name, whether change key to path plus name.
-            fileName,
-            getFileRelativePath(item.path, dirPath),
-            getWidgetName(fileName),
-          ));
+          _widgetList.add(
+            WidgetObject(
+              // If has same file name, whether change key to path plus name.
+              fileName,
+              getFileRelativePath(item.path, dirPath),
+              getWidgetName(fileName),
+            ),
+          );
         }
       }
     });
@@ -51,7 +49,7 @@ class WidgetScan {
   }
 
   RegExp getSuffixRegExp(String suffix) {
-    return RegExp('.*$suffix');
+    return RegExp('.*$suffix(?=.dart)');
   }
 }
 

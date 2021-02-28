@@ -1,5 +1,5 @@
 import 'package:widget_scan/widget_scan.dart';
 
-void main() {
+void main(List<String> args) {
   WidgetScan().run();
 }
