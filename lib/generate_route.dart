@@ -23,7 +23,7 @@ class GenerateRoute {
     final String packageName = getTargetPackageName();
     if (widgetList != null) {
       final void Function(WidgetObject) generateContent = (WidgetObject item) {
-        exportContent += "export 'package:$packageName/${item.path}';\n";
+        exportContent += "export 'package:$packageName/view/${item.path}';\n";
         routesContent +=
             "  '${item.name}': (BuildContext context) => const ${item.widgetName}(),\n";
       };
