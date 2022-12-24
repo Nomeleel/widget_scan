@@ -11,10 +11,10 @@ class WidgetScan {
     this.limitPath,
   });
 
-  final RegExp rule;
-  final String limitPath;
+  final RegExp? rule;
+  final String? limitPath;
 
-  List<WidgetObject> _widgetList;
+  late List<WidgetObject> _widgetList;
 
   void run() {
     getWidgetList();
@@ -28,12 +28,12 @@ class WidgetScan {
     Directory(dirPath).listSync(recursive: true).forEach(
       (FileSystemEntity item) {
         if (FileSystemEntity.isFileSync(item.path)) {
-          final String fileName = regExp.stringMatch(getFileName(item.path).toLowerCase());
+          final String? fileName = regExp.stringMatch(getFileName(item.path).toLowerCase());
           if (!isNullOrEmpty(fileName)) {
             _widgetList.add(
               WidgetObject(
                 // If has same file name, whether change key to path plus name.
-                fileName,
+                fileName!,
                 getFileRelativePath(item.path, dirPath),
                 getWidgetName(fileName),
               ),

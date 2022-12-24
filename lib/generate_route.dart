@@ -24,8 +24,7 @@ class GenerateRoute {
     if (widgetList != null) {
       final void Function(WidgetObject) generateContent = (WidgetObject item) {
         exportContent += "export 'package:$packageName/view/${item.path}';\n";
-        routesContent +=
-            "  '${item.name}': (BuildContext context) => const ${item.widgetName}(),\n";
+        routesContent += "  '${item.name}': (BuildContext context) => const ${item.widgetName}(),\n";
       };
       widgetList.forEach(generateContent);
     }
@@ -41,8 +40,7 @@ class GenerateRoute {
           .readAsStringSync()
           .replaceAll('// Import here.', importContent)
           .replaceAll('// Replace here.', routesContent);
-      File(getProjectLibPath('route/view_routes.dart'))
-          .writeAsString(templateContent);
+      File(getProjectLibPath('route/view_routes.dart')).writeAsString(templateContent);
     }
   }
 }
